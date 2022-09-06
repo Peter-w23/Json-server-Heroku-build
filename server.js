@@ -1,17 +1,12 @@
-const jsonServer = require("json-server");
-const cors = require("cors");
-const path = require("path");
-const server = jsonServer.create();
-const router = jsonServer.router(path.join(__dirname, "db", "db.json"));
-const middlewares = jsonServer.defaults();
+const cool = require('cool-ascii-faces');
+const express = require('express');
+const path = require('path');
+const PORT = process.env.PORT || 5000;
 
-server.use(cors());
-server.use(jsonServer.bodyParser);
-server.use(middlewares);
-server.use(router);
-
-const PORT = process.env.PORT || 3000;
-
-server.listen(PORT, () => {
-  console.log(`JSON Server is running on http://localhost:${PORT}`);
-});
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
+  .get('/cool', (req, res) => res.send(cool()))
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
